@@ -96,8 +96,8 @@ Abaixo detalha-se a participação efetiva de cada membro na concepção, implem
 
 | Integrante          | Atividades Desenvolvidas                                                                                                                                                                  |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **[Nome do Aluno 1]** | Implementação da Heurística do Vizinho Mais Próximo e sua Busca Local; Estrutura base do projeto em Python.                                                                                |
-| **Felipe Freitas** | Implementação da Heurística de Inserção Mais Barata e sua Busca Local; Leitura e parse dos arquivos de instância.                                                                           |
+| **Felipe Freitas** | Implementação da Heurística do Vizinho Mais Próximo e sua Busca Local; Estrutura base do projeto em Python.                                                                                |
+| **[Nome do Aluno 2]** | Implementação da Heurística de Inserção Mais Barata e sua Busca Local; Leitura e parse dos arquivos de instância.                                                                           |
 | **[Nome do Aluno 3]** | Desenvolvimento do Algoritmo Genético (Geração de população, Seleção e Mutação); Coleta de dados estatísticos (média/tempo).                                                                |
 | **[Nome do Aluno 4]** | Implementação do Algoritmo Memético; Desenvolvimento das 3 estratégias de Busca Local (ex: 2-opt, Swap, Insertion).                                                                         |
 | **[Nome do Aluno 5]** | Análise dos resultados e comparação com GLPK; Elaboração do relatório PDF; Revisão de código e testes finais.                                                                              |
