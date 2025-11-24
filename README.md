@@ -57,7 +57,7 @@ O programa aceita argumentos via linha de comando para definir qual algoritmo e 
 ### Formato
 
 ```bash
-python src/main.py [ALGORITMO] [CAMINHO_INSTANCIA]
+python main.py --alg [ALGORTIMO(1-4)] --prob [PROBLEMA(1-12)]
 ```
 
 ### Opções de algoritmo
@@ -70,7 +70,7 @@ python src/main.py [ALGORITMO] [CAMINHO_INSTANCIA]
 ### Exemplo de uso
 
 ```bash
-python src/main.py 4 instances/problema_distancia_01.txt
+python main.py --alg 1 --prob 11
 ```
 
 Nota: Para os algoritmos Genético e Memético, o software executará automaticamente as 20 iterações exigidas e salvará o resumo estatístico no arquivo de saída.
