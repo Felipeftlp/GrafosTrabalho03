@@ -43,14 +43,9 @@ Conforme especificado, foram desenvolvidos os seguintes algoritmos:
 
 ### Pré-requisitos
 
-Certifique-se de ter o Python 3 instalado. Caso utilize bibliotecas externas, instale-as via pip:
+Certifique-se de ter o Python 3 instalado.
 
-```bash
-pip install -r requirements.txt
-# ou instale manualmente, ex: pip install numpy
-````
-
-### Exacução
+### Execução
 
 O programa aceita argumentos via linha de comando para definir qual algoritmo e qual instância rodar.
 
@@ -97,10 +92,10 @@ Abaixo detalha-se a participação efetiva de cada membro na concepção, implem
 | Integrante          | Atividades Desenvolvidas                                                                                                                                                                  |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Felipe Freitas** | Implementação da Heurística do Vizinho Mais Próximo e sua Busca Local; Estrutura base do projeto em Python.                                                                                |
-| **[Nome do Aluno 2]** | Implementação da Heurística de Inserção Mais Barata e sua Busca Local; Leitura e parse dos arquivos de instância.                                                                           |
+| **Djavan Costa** | Implementação da Heurística de Inserção Mais Barata e sua Busca Local; Leitura e parse dos arquivos de instância.                                                                           |
 | **Kaio Eduardo** | Desenvolvimento do Algoritmo Genético (Geração de população, Seleção e Mutação); Coleta de dados estatísticos (média/tempo).                                                                |
-| **[Nome do Aluno 4]** | Implementação do Algoritmo Memético; Desenvolvimento das 3 estratégias de Busca Local (ex: 2-opt, Swap, Insertion).                                                                         |
-| **[Nome do Aluno 5]** | Análise dos resultados e comparação com GLPK; Elaboração do relatório PDF; Revisão de código e testes finais.                                                                              |
+| **Giliardo Júlio** | Implementação do Algoritmo Memético; Desenvolvimento das 3 estratégias de Busca Local (ex: 2-opt, Swap, Insertion).                                                                         |
+| **Todos do grupo** | Análise dos resultados e comparação com GLPK; Elaboração do relatório PDF; Revisão de código e testes finais.                                                                              |
 
 ### Observações
 
