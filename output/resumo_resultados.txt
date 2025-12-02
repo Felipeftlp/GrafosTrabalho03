@@ -4,85 +4,85 @@ RESUMO DE RESULTADOS - ALGORITMOS EVOLUTIVOS
 
 Instância: Problema 1 (Km)
 Algoritmo: Algoritmo Genético
-Menor valor encontrado: 2046.40 Km
-Valor médio: 2159.79 Km
-Tempo médio de execução: 0.0686 segundos
+Menor valor encontrado: 1942.30 Km
+Valor médio: 1951.27 Km
+Tempo médio de execução: 0.8524 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 2 (Min)
 Algoritmo: Algoritmo Genético
-Menor valor encontrado: 2073.00 Min
-Valor médio: 2235.90 Min
-Tempo médio de execução: 0.0687 segundos
+Menor valor encontrado: 1977.00 Min
+Valor médio: 1981.70 Min
+Tempo médio de execução: 0.8434 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 3 (Km)
 Algoritmo: Algoritmo Genético
-Menor valor encontrado: 1771.30 Km
-Valor médio: 1830.85 Km
-Tempo médio de execução: 0.0478 segundos
+Menor valor encontrado: 1695.00 Km
+Valor médio: 1696.29 Km
+Tempo médio de execução: 0.7383 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 4 (Min)
 Algoritmo: Algoritmo Genético
-Menor valor encontrado: 1717.00 Min
-Valor médio: 1779.05 Min
-Tempo médio de execução: 0.0471 segundos
+Menor valor encontrado: 1663.00 Min
+Valor médio: 1668.80 Min
+Tempo médio de execução: 0.7116 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 5 (Km)
 Algoritmo: Algoritmo Genético
-Menor valor encontrado: 1337.30 Km
-Valor médio: 1358.32 Km
-Tempo médio de execução: 0.0307 segundos
+Menor valor encontrado: 1321.00 Km
+Valor médio: 1321.00 Km
+Tempo médio de execução: 0.5862 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 6 (Min)
 Algoritmo: Algoritmo Genético
-Menor valor encontrado: 1242.00 Min
-Valor médio: 1254.90 Min
-Tempo médio de execução: 0.0317 segundos
+Menor valor encontrado: 1223.00 Min
+Valor médio: 1227.10 Min
+Tempo médio de execução: 0.5533 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 7 (Km)
 Algoritmo: Algoritmo Genético
 Menor valor encontrado: 672.70 Km
-Valor médio: 680.44 Km
-Tempo médio de execução: 0.0196 segundos
+Valor médio: 672.70 Km
+Tempo médio de execução: 0.4371 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 8 (Min)
 Algoritmo: Algoritmo Genético
 Menor valor encontrado: 606.00 Min
-Valor médio: 607.30 Min
-Tempo médio de execução: 0.0188 segundos
+Valor médio: 606.00 Min
+Tempo médio de execução: 0.4281 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 9 (Km)
 Algoritmo: Algoritmo Genético
 Menor valor encontrado: 438.30 Km
 Valor médio: 438.30 Km
-Tempo médio de execução: 0.0143 segundos
+Tempo médio de execução: 0.4066 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 10 (Min)
 Algoritmo: Algoritmo Genético
 Menor valor encontrado: 364.00 Min
 Valor médio: 364.00 Min
-Tempo médio de execução: 0.0142 segundos
+Tempo médio de execução: 0.3939 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 11 (Km)
 Algoritmo: Algoritmo Genético
 Menor valor encontrado: 344.90 Km
 Valor médio: 344.90 Km
-Tempo médio de execução: 0.0135 segundos
+Tempo médio de execução: 0.3832 segundos
 ----------------------------------------------------------------------
 
 Instância: Problema 12 (Min)
 Algoritmo: Algoritmo Genético
 Menor valor encontrado: 305.00 Min
 Valor médio: 305.00 Min
-Tempo médio de execução: 0.0138 segundos
+Tempo médio de execução: 0.3908 segundos
 ----------------------------------------------------------------------
 

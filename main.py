@@ -22,6 +22,17 @@ CONFIG_PROBLEMAS = {
     11: {'tipo': 'km',  'cidades': list(range(1, 7))},                  # 1 a 6
     12: {'tipo': 'min', 'cidades': list(range(1, 7))}                   # 1 a 6
 }
+CONFIG_AG = {
+    'tamanho_populacao': 200,
+    'num_geracoes': 500,
+    'probabilidade_cruzamento': 0.9,
+    'probabilidade_mutacao': 0.05,
+    'metodo_selecao': 'torneio',
+    'tamanho_torneio': 5,
+    'metodo_cruzamento': 'ox',
+    'metodo_mutacao': 'inversao',
+    'taxa_elitismo': 0.1
+}
 
 def executar_uma_vez(algoritmo, matriz_problema):
     """Executa uma única iteração do algoritmo escolhido."""
@@ -42,14 +53,7 @@ def executar_uma_vez(algoritmo, matriz_problema):
         # Executa o algoritmo genético
         rota, custo, _ = algoritmo_genetico(
             matriz_problema,
-            tamanho_populacao=50,
-            num_geracoes=100,
-            probabilidade_cruzamento=0.8,
-            probabilidade_mutacao=0.1,
-            metodo_selecao='torneio',
-            metodo_cruzamento='ox',
-            metodo_mutacao='swap',
-            taxa_elitismo=0.1
+            **CONFIG_AG
         )
         
     elif algoritmo == 4: # Memético

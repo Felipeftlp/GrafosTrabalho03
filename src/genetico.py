@@ -11,7 +11,6 @@ seguindo a estrutura:
 6. Formação de nova população
 7. Repetição até critério de parada
 
-Autor: Implementação para Trabalho de Grafos
 """
 
 import random
@@ -181,13 +180,9 @@ def selecao_torneio(populacao_avaliada, num_pais, tamanho_torneio=3):
     
     return pais_selecionados
 
-
 def cruzamento_ox(pai1, pai2):
     """
-    Realiza cruzamento Order Crossover (OX) entre dois pais.
-    
-    OX preserva a ordem relativa das cidades do primeiro pai e preenche
-    as posições restantes com as cidades do segundo pai na ordem em que aparecem.
+    Realiza cruzamento OX entre dois pais.
     
     Args:
         pai1 (list): Primeira rota (pai)
@@ -196,38 +191,43 @@ def cruzamento_ox(pai1, pai2):
     Returns:
         tuple: (filho1, filho2) - Dois filhos gerados
     """
+
     n = len(pai1)
+    # Garante pontos aleatórios ordenados
+    ponto1, ponto2 = sorted(random.sample(range(n), 2))
     
-    # Seleciona dois pontos de corte aleatórios
-    ponto1 = random.randint(0, n - 1)
-    ponto2 = random.randint(0, n - 1)
+    # Inicializa filhos
+    filho1 = [None] * n
+    filho2 = [None] * n
     
-    # Garante que ponto1 < ponto2
-    if ponto1 > ponto2:
-        ponto1, ponto2 = ponto2, ponto1
+    # Copia o segmento fixo (herança genética direta)
+    filho1[ponto1:ponto2+1] = pai1[ponto1:ponto2+1]
+    filho2[ponto1:ponto2+1] = pai2[ponto1:ponto2+1]
     
-    def criar_filho_ox(pai_origem, pai_preenchimento):
-        """Cria um filho usando OX"""
-        filho = [None] * n
+    # Cria sets para verificação instantânea O(1)
+    # Isso é o segredo da performance em Python
+    set_f1 = set(filho1[ponto1:ponto2+1])
+    set_f2 = set(filho2[ponto1:ponto2+1])
+    
+    def preencher_restante(filho, pai_origem, conjunto_existente):
+        # Começa a preencher logo após o segundo ponto de corte
+        pos_atual = (ponto2 + 1) % n
+        # Começa a ler o outro pai também após o segundo ponto de corte
+        idx_pai = (ponto2 + 1) % n
         
-        # Copia o segmento do pai_origem
-        for i in range(ponto1, ponto2 + 1):
-            filho[i] = pai_origem[i]
-        
-        # Preenche o restante com cidades do pai_preenchimento na ordem
-        pos_filho = (ponto2 + 1) % n
-        for cidade in pai_preenchimento:
-            if cidade not in filho:
-                filho[pos_filho] = cidade
-                pos_filho = (pos_filho + 1) % n
-        
-        return filho
-    
-    filho1 = criar_filho_ox(pai1, pai2)
-    filho2 = criar_filho_ox(pai2, pai1)
+        count = 0
+        while count < n: # Percorre o pai circularmente
+            cidade = pai_origem[idx_pai]
+            if cidade not in conjunto_existente:
+                filho[pos_atual] = cidade
+                pos_atual = (pos_atual + 1) % n
+            idx_pai = (idx_pai + 1) % n
+            count += 1
+            
+    preencher_restante(filho1, pai2, set_f1)
+    preencher_restante(filho2, pai1, set_f2)
     
     return filho1, filho2
-
 
 def cruzamento_pmx(pai1, pai2):
     """
@@ -347,13 +347,14 @@ def mutacao_inversao(rota, probabilidade_mutacao=0.1):
 
 
 def algoritmo_genetico(matriz_distancias, 
-                       tamanho_populacao=50,
-                       num_geracoes=100,
-                       probabilidade_cruzamento=0.8,
-                       probabilidade_mutacao=0.1,
+                       tamanho_populacao=200,
+                       num_geracoes=500,
+                       probabilidade_cruzamento=0.9,
+                       probabilidade_mutacao=0.05,
                        metodo_selecao='torneio',
                        metodo_cruzamento='ox',
-                       metodo_mutacao='swap',
+                       metodo_mutacao='inversao',
+                       tamanho_torneio=5,
                        taxa_elitismo=0.1):
     """
     Executa o Algoritmo Genético completo para resolver o PCV.
@@ -399,6 +400,9 @@ def algoritmo_genetico(matriz_distancias,
     
     # Calcula número de indivíduos para elitismo
     num_elite = max(1, int(tamanho_populacao * taxa_elitismo))
+
+    geracoes_sem_melhora = 0
+    taxa_mutacao_atual = probabilidade_mutacao
     
     # 2. Loop principal (gerações)
     for geracao in range(num_geracoes):
@@ -427,8 +431,8 @@ def algoritmo_genetico(matriz_distancias,
             # Seleção de pais
             if metodo_selecao == 'roleta':
                 pais = selecao_roleta(populacao_avaliada, 2)
-            else:  # torneio
-                pais = selecao_torneio(populacao_avaliada, 2)
+            else: # torneio
+                pais = selecao_torneio(populacao_avaliada, 2, tamanho_torneio=tamanho_torneio)
             
             pai1, pai2 = pais[0], pais[1]
             
@@ -451,9 +455,17 @@ def algoritmo_genetico(matriz_distancias,
                 filho2 = mutacao_inversao(filho2, probabilidade_mutacao)
             
             # Adiciona os filhos à nova população
-            nova_populacao.append(filho1)
+            if filho1 != pai1 and filho1 != pai2:
+                nova_populacao.append(filho1)
+            else:
+                # Se for clone, aplica uma mutação forçada para diferenciar
+                nova_populacao.append(mutacao_inversao(filho1, probabilidade_mutacao=1.0))
+
             if len(nova_populacao) < tamanho_populacao:
-                nova_populacao.append(filho2)
+                if filho2 != pai1 and filho2 != pai2:
+                    nova_populacao.append(filho2)
+                else:
+                    nova_populacao.append(mutacao_inversao(filho2, probabilidade_mutacao=1.0))
         
         # Atualiza população para próxima geração
         populacao = nova_populacao
