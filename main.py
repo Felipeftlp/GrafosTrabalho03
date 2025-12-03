@@ -5,6 +5,7 @@ import statistics
 from src.utils import ler_matriz_csv, ler_nomes_cidades, calcular_custo_rota, extrair_submatriz_por_ids
 from src.solver import vizinho_mais_proximo, busca_local_2opt
 from src.genetico import algoritmo_genetico
+from src.memetico import algoritmo_memetico
 
 # --- CONFIGURAÇÃO DOS 12 PROBLEMAS ---
 # Mapeia o ID do problema para o tipo de matriz e a lista de cidades
@@ -57,8 +58,10 @@ def executar_uma_vez(algoritmo, matriz_problema):
         )
         
     elif algoritmo == 4: # Memético
-        # TODO: Chamar função do Integrante 4
-        pass
+        rota, custo, _ = algoritmo_memetico(
+            matriz_problema,
+            **CONFIG_AG
+        )
 
     return custo, rota
 
