@@ -2,87 +2,87 @@
 RESUMO DE RESULTADOS - ALGORITMOS EVOLUTIVOS
 ======================================================================
 
-Inst√¢ncia: Problema 1 (Km)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 1 (Km)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 1942.30 Km
-Valor m√©dio: 1951.27 Km
-Tempo m√©dio de execu√ß√£o: 0.8524 segundos
+Valor mÈdio: 1946.57 Km
+Tempo mÈdio de execuÁ„o: 39.8811 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 2 (Min)
-Algoritmo: Algoritmo Gen√©tico
-Menor valor encontrado: 1977.00 Min
-Valor m√©dio: 1981.70 Min
-Tempo m√©dio de execu√ß√£o: 0.8434 segundos
+Inst‚ncia: Problema 2 (Min)
+Algoritmo: Algoritmo MemÈtico
+Menor valor encontrado: 1973.00 Min
+Valor mÈdio: 1977.50 Min
+Tempo mÈdio de execuÁ„o: 38.9292 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 3 (Km)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 3 (Km)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 1695.00 Km
-Valor m√©dio: 1696.29 Km
-Tempo m√©dio de execu√ß√£o: 0.7383 segundos
+Valor mÈdio: 1695.53 Km
+Tempo mÈdio de execuÁ„o: 29.3884 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 4 (Min)
-Algoritmo: Algoritmo Gen√©tico
-Menor valor encontrado: 1663.00 Min
-Valor m√©dio: 1668.80 Min
-Tempo m√©dio de execu√ß√£o: 0.7116 segundos
+Inst‚ncia: Problema 4 (Min)
+Algoritmo: Algoritmo MemÈtico
+Menor valor encontrado: 1662.00 Min
+Valor mÈdio: 1662.55 Min
+Tempo mÈdio de execuÁ„o: 28.9914 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 5 (Km)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 5 (Km)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 1321.00 Km
-Valor m√©dio: 1321.00 Km
-Tempo m√©dio de execu√ß√£o: 0.5862 segundos
+Valor mÈdio: 1321.00 Km
+Tempo mÈdio de execuÁ„o: 14.5935 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 6 (Min)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 6 (Min)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 1223.00 Min
-Valor m√©dio: 1227.10 Min
-Tempo m√©dio de execu√ß√£o: 0.5533 segundos
+Valor mÈdio: 1223.00 Min
+Tempo mÈdio de execuÁ„o: 14.5115 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 7 (Km)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 7 (Km)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 672.70 Km
-Valor m√©dio: 672.70 Km
-Tempo m√©dio de execu√ß√£o: 0.4371 segundos
+Valor mÈdio: 672.70 Km
+Tempo mÈdio de execuÁ„o: 5.4349 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 8 (Min)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 8 (Min)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 606.00 Min
-Valor m√©dio: 606.00 Min
-Tempo m√©dio de execu√ß√£o: 0.4281 segundos
+Valor mÈdio: 606.00 Min
+Tempo mÈdio de execuÁ„o: 5.5556 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 9 (Km)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 9 (Km)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 438.30 Km
-Valor m√©dio: 438.30 Km
-Tempo m√©dio de execu√ß√£o: 0.4066 segundos
+Valor mÈdio: 438.30 Km
+Tempo mÈdio de execuÁ„o: 2.9348 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 10 (Min)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 10 (Min)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 364.00 Min
-Valor m√©dio: 364.00 Min
-Tempo m√©dio de execu√ß√£o: 0.3939 segundos
+Valor mÈdio: 364.00 Min
+Tempo mÈdio de execuÁ„o: 2.8841 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 11 (Km)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 11 (Km)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 344.90 Km
-Valor m√©dio: 344.90 Km
-Tempo m√©dio de execu√ß√£o: 0.3832 segundos
+Valor mÈdio: 344.90 Km
+Tempo mÈdio de execuÁ„o: 2.4507 segundos
 ----------------------------------------------------------------------
 
-Inst√¢ncia: Problema 12 (Min)
-Algoritmo: Algoritmo Gen√©tico
+Inst‚ncia: Problema 12 (Min)
+Algoritmo: Algoritmo MemÈtico
 Menor valor encontrado: 305.00 Min
-Valor m√©dio: 305.00 Min
-Tempo m√©dio de execu√ß√£o: 0.3908 segundos
+Valor mÈdio: 305.00 Min
+Tempo mÈdio de execuÁ„o: 2.5190 segundos
 ----------------------------------------------------------------------
 

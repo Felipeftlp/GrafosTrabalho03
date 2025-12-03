@@ -60,13 +60,50 @@ def mutacao_shift(rota, probabilidade_mutacao=0.1):
 
     return rota_mutada
 
-def busca_local_shift(rota, matriz_distancias, numero_tentativas=20):
+def mutacao_2_opt(rota, probabilidade_mutacao=0.1):
+    """
+    Aplica mutação 2-OPT em uma rota.
+
+    Remove duas arestas e reconecta invertendo o segmento entre duas posições.
+    """
+    if random.random() > probabilidade_mutacao:
+        return rota
+
+    n = len(rota)
+    rota_mutada = rota.copy()
+
+    # Seleciona duas posições distintas
+    i = random.randint(0, n - 2)
+    j = random.randint(i + 1, n - 1)
+
+    # Inverte o segmento entre i e j
+    rota_mutada[i:j+1] = reversed(rota_mutada[i:j+1])
+
+    return rota_mutada
+
+def busca_local_2_opt(rota, matriz_distancias):
+    # Cálculo do custo atual
+    melhor_rota = rota
+    melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
+
+    # Executa tentativas de melhoria
+    for _ in range(len(rota)):
+        nova = mutacao_2_opt(melhor_rota, probabilidade_mutacao=1.0)
+        novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
+
+        if novo_custo < melhor_custo:
+            melhor_rota = nova
+            melhor_custo = novo_custo
+
+    return melhor_rota
+
+def busca_local_shift(rota, matriz_distancias):
     # Custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
     # Tenta até achar uma melhoria
-    for _ in range(numero_tentativas):
+    for _ in range(len(rota)):
         nova = mutacao_shift(melhor_rota, probabilidade_mutacao=1.0)
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
@@ -77,13 +114,13 @@ def busca_local_shift(rota, matriz_distancias, numero_tentativas=20):
     return melhor_rota
 
 
-def busca_local_swap(rota, matriz_distancias, numero_tentativas=20):
+def busca_local_swap(rota, matriz_distancias):
     # Custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
     # Tenta até achar uma melhoria
-    for _ in range(numero_tentativas):
+    for _ in range(len(rota)):
         nova = mutacao_swap(melhor_rota, probabilidade_mutacao=1.0)
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
@@ -94,13 +131,13 @@ def busca_local_swap(rota, matriz_distancias, numero_tentativas=20):
     return melhor_rota
 
 
-def busca_local_inversao(rota, matriz_distancias, numero_tentativas=20):
+def busca_local_inversao(rota, matriz_distancias):
     # Custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
     # Tenta até achar uma melhoria
-    for _ in range(numero_tentativas):
+    for _ in range(len(rota)):
         nova = mutacao_inversao(melhor_rota, probabilidade_mutacao=1.0)
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
@@ -223,17 +260,21 @@ def algoritmo_memetico(matriz_distancias,
                 filho1 = mutacao_inversao(filho1, probabilidade_mutacao)
                 filho2 = mutacao_inversao(filho2, probabilidade_mutacao)
 
-            # Busca local de melhoria (Escolhe aleatoriamente uma das três estratégias)
-            escolha = random.choice(['shift', 'swap', 'inversao'])
+            # Busca local de melhoria (Escolhe aleatoriamente uma das quatro estratégias)
+            escolha = random.choice(['shift', 'swap', 'inversao', '2opt'])
             if escolha == 'shift':
                 filho1 = busca_local_shift(filho1, matriz_distancias)
                 filho2 = busca_local_shift(filho2, matriz_distancias)
             elif escolha == 'swap':
                 filho1 = busca_local_swap(filho1, matriz_distancias)
                 filho2 = busca_local_swap(filho2, matriz_distancias)
-            else:
+            elif escolha == 'inversao':
                 filho1 = busca_local_inversao(filho1, matriz_distancias)
                 filho2 = busca_local_inversao(filho2, matriz_distancias)
+            else:  # '2opt'
+                filho1 = busca_local_2_opt(filho1, matriz_distancias)
+                filho2 = busca_local_2_opt(filho2, matriz_distancias)
+
             
             # Adiciona os filhos à nova população
             if filho1 != pai1 and filho1 != pai2:
