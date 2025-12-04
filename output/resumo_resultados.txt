@@ -2,87 +2,170 @@
 RESUMO DE RESULTADOS - ALGORITMOS EVOLUTIVOS
 ======================================================================
 
-Inst�ncia: Problema 1 (Km)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 1 (Km)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 1942.30 Km
-Valor m�dio: 1946.57 Km
-Tempo m�dio de execu��o: 39.8811 segundos
+Valor médio: 1955.85 Km
+Tempo médio de execução: 0.8273 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 2 (Min)
-Algoritmo: Algoritmo Mem�tico
-Menor valor encontrado: 1973.00 Min
-Valor m�dio: 1977.50 Min
-Tempo m�dio de execu��o: 38.9292 segundos
+Instância: Problema 2 (Min)
+Algoritmo: Algoritmo Genético
+Menor valor encontrado: 1977.00 Min
+Valor médio: 1988.45 Min
+Tempo médio de execução: 0.8312 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 3 (Km)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 3 (Km)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 1695.00 Km
-Valor m�dio: 1695.53 Km
-Tempo m�dio de execu��o: 29.3884 segundos
+Valor médio: 1697.46 Km
+Tempo médio de execução: 0.7256 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 4 (Min)
-Algoritmo: Algoritmo Mem�tico
-Menor valor encontrado: 1662.00 Min
-Valor m�dio: 1662.55 Min
-Tempo m�dio de execu��o: 28.9914 segundos
+Instância: Problema 4 (Min)
+Algoritmo: Algoritmo Genético
+Menor valor encontrado: 1663.00 Min
+Valor médio: 1669.70 Min
+Tempo médio de execução: 0.7224 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 5 (Km)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 5 (Km)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 1321.00 Km
-Valor m�dio: 1321.00 Km
-Tempo m�dio de execu��o: 14.5935 segundos
+Valor médio: 1321.00 Km
+Tempo médio de execução: 0.5942 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 6 (Min)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 6 (Min)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 1223.00 Min
-Valor m�dio: 1223.00 Min
-Tempo m�dio de execu��o: 14.5115 segundos
+Valor médio: 1226.15 Min
+Tempo médio de execução: 0.5893 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 7 (Km)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 7 (Km)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 672.70 Km
-Valor m�dio: 672.70 Km
-Tempo m�dio de execu��o: 5.4349 segundos
+Valor médio: 672.70 Km
+Tempo médio de execução: 0.4627 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 8 (Min)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 8 (Min)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 606.00 Min
-Valor m�dio: 606.00 Min
-Tempo m�dio de execu��o: 5.5556 segundos
+Valor médio: 606.00 Min
+Tempo médio de execução: 0.4600 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 9 (Km)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 9 (Km)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 438.30 Km
-Valor m�dio: 438.30 Km
-Tempo m�dio de execu��o: 2.9348 segundos
+Valor médio: 438.30 Km
+Tempo médio de execução: 0.4078 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 10 (Min)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 10 (Min)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 364.00 Min
-Valor m�dio: 364.00 Min
-Tempo m�dio de execu��o: 2.8841 segundos
+Valor médio: 364.00 Min
+Tempo médio de execução: 0.4106 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 11 (Km)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 11 (Km)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 344.90 Km
-Valor m�dio: 344.90 Km
-Tempo m�dio de execu��o: 2.4507 segundos
+Valor médio: 344.90 Km
+Tempo médio de execução: 0.4068 segundos
 ----------------------------------------------------------------------
 
-Inst�ncia: Problema 12 (Min)
-Algoritmo: Algoritmo Mem�tico
+Instância: Problema 12 (Min)
+Algoritmo: Algoritmo Genético
 Menor valor encontrado: 305.00 Min
-Valor m�dio: 305.00 Min
-Tempo m�dio de execu��o: 2.5190 segundos
+Valor médio: 305.00 Min
+Tempo médio de execução: 0.4053 segundos
 ----------------------------------------------------------------------
 
+Instância: Problema 1 (Km)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 1942.30 Km
+Valor médio: 1946.57 Km
+Tempo médio de execução: 39.8811 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 2 (Min)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 1973.00 Min
+Valor médio: 1977.50 Min
+Tempo médio de execução: 38.9292 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 3 (Km)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 1695.00 Km
+Valor médio: 1695.53 Km
+Tempo médio de execução: 29.3884 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 4 (Min)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 1662.00 Min
+Valor médio: 1662.55 Min
+Tempo médio de execução: 28.9914 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 5 (Km)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 1321.00 Km
+Valor médio: 1321.00 Km
+Tempo médio de execução: 14.5935 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 6 (Min)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 1223.00 Min
+Valor médio: 1223.00 Min
+Tempo médio de execução: 14.5115 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 7 (Km)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 672.70 Km
+Valor médio: 672.70 Km
+Tempo médio de execução: 5.4349 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 8 (Min)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 606.00 Min
+Valor médio: 606.00 Min
+Tempo médio de execução: 5.5556 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 9 (Km)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 438.30 Km
+Valor médio: 438.30 Km
+Tempo médio de execução: 2.9348 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 10 (Min)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 364.00 Min
+Valor médio: 364.00 Min
+Tempo médio de execução: 2.8841 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 11 (Km)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 344.90 Km
+Valor médio: 344.90 Km
+Tempo médio de execução: 2.4507 segundos
+----------------------------------------------------------------------
+
+Instância: Problema 12 (Min)
+Algoritmo: Algoritmo Memético
+Menor valor encontrado: 305.00 Min
+Valor médio: 305.00 Min
+Tempo médio de execução: 2.5190 segundos
+----------------------------------------------------------------------
