@@ -2,7 +2,7 @@ import random
 import copy
 from src.utils import calcular_custo_rota
 
-def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False, cidade_inicial=0):
+def vizinho_mais_proximo(matriz_distancias, cidade_inicial):
     """
     Implementa a Heurística Construtiva do Vizinho Mais Próximo (Nearest Neighbor).
     
@@ -24,7 +24,7 @@ def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False, cidade_inici
     visitadas = set()
     
     # Passo 1: Escolher cidade inicial
-    cidade_atual = random.randint(0, num_cidades - 1) if inicio_aleatorio else cidade_inicial
+    cidade_atual = cidade_inicial
     rota = [cidade_atual]
     visitadas.add(cidade_atual)
     
@@ -72,70 +72,58 @@ def insercao_mais_barata(matriz_distancias, vertice_inicial):
         list: A rota construída (ex: [0, 2, 1, 3, 0])
     """
     num_cidades = len(matriz_distancias)
-    print(f"Numero de cidades: {num_cidades}")
     
     # Passo inicial: encontrar o vértice mais próximo de s (escolha gulosa)
-    v0 = -1
+    vertice_proximo = -1
     menor_distancia = float('inf')
-    for v in range(num_cidades):
-        if v != vertice_inicial:
-            distancia = matriz_distancias[vertice_inicial][v]
+    for vertice in range(num_cidades):
+        if vertice != vertice_inicial:
+            distancia = matriz_distancias[vertice_inicial][vertice]
             if distancia < menor_distancia:
                 menor_distancia = distancia
-                v0 = v
+                vertice_proximo = vertice
     
-    # Inicializar rota com ciclo inicial [s, v0, s]
-    rota = [vertice_inicial, v0, vertice_inicial]
+    rota = [vertice_inicial, vertice_proximo, vertice_inicial]
     
-    # C: vértices já inseridos
-    C = {vertice_inicial, v0}
+    vertices_inseridos = {vertice_inicial, vertice_proximo}
     
-    # R: vértices restantes
-    R = set(range(num_cidades)) - C
+    vertices_restantes = set(range(num_cidades)) - vertices_inseridos
     
-    # Loop principal: enquanto há vértices para inserir
-    while R:
+    while vertices_restantes:
         # Passo 1: escolher o vértice mais próximo do ciclo atual
-        melhor_r = None
+        melhor_vertice = None
         menor_dist_ao_ciclo = float('inf')
         
-        for r in R:
-            # Calcular distância mínima de r para qualquer vértice em C
+        for vertice_r in vertices_restantes:
             dist_r = float('inf')
-            for c in C:
-                dist_r = min(dist_r, matriz_distancias[r][c])
+            for vertice_i in vertices_inseridos:
+                dist_r = min(dist_r, matriz_distancias[vertice_r][vertice_i])
             
             # Escolher r* = argmin_r(dist_r)
             if dist_r < menor_dist_ao_ciclo:
                 menor_dist_ao_ciclo = dist_r
-                melhor_r = r
-        
-        r_estrela = melhor_r
-        
-        # Passo 2: encontrar melhor posição para inserção de r*
+                melhor_vertice = vertice_r
+                
+        # Passo 2: encontrar melhor posição para inserção de melhor_vertice
         melhor_custo = float('inf')
-        melhor_pos = None
+        melhor_posicao = None
         
         # Para i de 1 até |rota|-1 (excluindo a última posição que é igual à primeira)
         for i in range(1, len(rota) - 1):
-            u = rota[i - 1]  # vértice anterior
-            v = rota[i]      # vértice atual
+            vertice_anterior = rota[i - 1]  
+            vertice_atual = rota[i]      
             
-            # Calcular custo de inserção: d(u, r*) + d(r*, v) - d(u, v)
-            custo = (matriz_distancias[u][r_estrela] + 
-                    matriz_distancias[r_estrela][v] - 
-                    matriz_distancias[u][v])
+            custo = (matriz_distancias[vertice_anterior][melhor_vertice] + 
+                    matriz_distancias[melhor_vertice][vertice_atual] - 
+                    matriz_distancias[vertice_anterior][vertice_atual])
             
             if custo < melhor_custo:
                 melhor_custo = custo
-                melhor_pos = i
+                melhor_posicao = i
         
-        # Inserir r* na melhor posição encontrada
-        rota.insert(melhor_pos, r_estrela)
-        
-        # Atualizar conjuntos
-        C.add(r_estrela)
-        R.remove(r_estrela)
+        rota.insert(melhor_posicao, melhor_vertice)
+        vertices_inseridos.add(melhor_vertice)
+        vertices_restantes.remove(melhor_vertice)
     
     return rota
 

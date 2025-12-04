@@ -42,7 +42,7 @@ def executar_uma_vez(algoritmo, matriz_problema):
     
     if algoritmo == 1: # Vizinho Mais Próximo + 2-Opt
         # inicio_aleatorio=True garante variedade nas 20 execuções
-        rota_ini = vizinho_mais_proximo(matriz_problema, inicio_aleatorio=True) 
+        rota_ini = vizinho_mais_proximo(matriz_problema, cidade_inicial=0) 
         rota = busca_local_2opt(rota_ini, matriz_problema)
         custo = calcular_custo_rota(rota, matriz_problema)
         
@@ -108,7 +108,7 @@ def executar_problema(args, num_problema):
     matriz_problema = extrair_submatriz_por_ids(matriz_completa, ids_cidades)
 
     # 4. Execução (20x para estatística)
-    n_execucoes = 20 if args.alg in [3, 4] else 1
+    n_execucoes = 20 if args.alg in [1, 3, 4] else 1
     
     print(f"[*] Rodando {n_execucoes} execuções do Algoritmo {args.alg}...")
     
