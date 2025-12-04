@@ -18,24 +18,25 @@ import copy
 from src.utils import calcular_custo_rota
 
 
-def inicializar_populacao(tamanho_populacao, num_cidades, usar_heuristica=True, matriz_distancias=None):
+def inicializar_populacao(tamanho_populacao, num_cidades, usar_heuristica=True, matriz_distancias=None, cidade_inicial_fixa=0):
     """
     Inicializa a população inicial de soluções candidatas.
     
     Estratégia: 
     - Parte da população é gerada aleatoriamente (diversidade)
     - Parte pode usar heurística do vizinho mais próximo (qualidade inicial)
+    - Todas as rotas começam com cidade_inicial_fixa (padrão: 0 = Angicos)
     
     Args:
         tamanho_populacao (int): Número de indivíduos na população
         num_cidades (int): Número de cidades no problema
         usar_heuristica (bool): Se True, usa heurística para parte da população
         matriz_distancias (list): Matriz de distâncias (necessária se usar_heuristica=True)
+        cidade_inicial_fixa (int): Índice da cidade inicial fixa (padrão: 0)
     
     Returns:
         list: Lista de rotas (cada rota é uma lista de índices de cidades)
-              Formato: [[0,1,2,3,0], [2,0,1,3,2], ...]
-              Nota: A rota não inclui o retorno ao início na representação interna
+              Formato: [[0,1,2,3], [0,2,1,3], ...]
     """
     populacao = []
     
@@ -46,16 +47,27 @@ def inicializar_populacao(tamanho_populacao, num_cidades, usar_heuristica=True, 
     if num_heuristica > 0:
         from src.solver import vizinho_mais_proximo
         for _ in range(num_heuristica):
-            rota_heuristica = vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=True)
+            # Usa cidade inicial fixa
+            rota_heuristica = vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False, cidade_inicial=cidade_inicial_fixa)
             # Remove o último elemento (retorno ao início) para representação interna
             rota_interna = rota_heuristica[:-1]
+            # Garante que começa com cidade_inicial_fixa
+            if rota_interna[0] != cidade_inicial_fixa:
+                # Rotaciona a rota para começar com cidade_inicial_fixa
+                idx = rota_interna.index(cidade_inicial_fixa)
+                rota_interna = rota_interna[idx:] + rota_interna[:idx]
             populacao.append(rota_interna)
     
     # Gera o restante da população aleatoriamente
     cidades = list(range(num_cidades))
+    # Remove a cidade inicial da lista para embaralhar o restante
+    cidades_restantes = [c for c in cidades if c != cidade_inicial_fixa]
+    
     for _ in range(tamanho_populacao - len(populacao)):
-        rota_aleatoria = cidades.copy()
+        rota_aleatoria = cidades_restantes.copy()
         random.shuffle(rota_aleatoria)
+        # Adiciona cidade inicial no início
+        rota_aleatoria.insert(0, cidade_inicial_fixa)
         populacao.append(rota_aleatoria)
     
     return populacao
@@ -180,69 +192,68 @@ def selecao_torneio(populacao_avaliada, num_pais, tamanho_torneio=3):
     
     return pais_selecionados
 
-def cruzamento_ox(pai1, pai2):
+def cruzamento_ox(pai1, pai2, cidade_inicial_fixa=0):
     """
-    Realiza cruzamento OX entre dois pais.
+    Realiza cruzamento OX entre dois pais, preservando cidade inicial fixa.
     
     Args:
         pai1 (list): Primeira rota (pai)
         pai2 (list): Segunda rota (pai)
+        cidade_inicial_fixa (int): Cidade que deve estar no início (padrão: 0)
     
     Returns:
         tuple: (filho1, filho2) - Dois filhos gerados
     """
-
-    n = len(pai1)
+    # Remove cidade inicial dos pais para processamento
+    pai1_sem_inicial = [c for c in pai1 if c != cidade_inicial_fixa]
+    pai2_sem_inicial = [c for c in pai2 if c != cidade_inicial_fixa]
+    
+    n = len(pai1_sem_inicial)
     # Garante pontos aleatórios ordenados
     ponto1, ponto2 = sorted(random.sample(range(n), 2))
     
-    # Inicializa filhos
+    # Inicializa filhos (sem cidade inicial ainda)
     filho1 = [None] * n
     filho2 = [None] * n
     
-    # Copia o segmento fixo (herança genética direta)
-    filho1[ponto1:ponto2+1] = pai1[ponto1:ponto2+1]
-    filho2[ponto1:ponto2+1] = pai2[ponto1:ponto2+1]
+    # Copia o segmento fixo
+    filho1[ponto1:ponto2+1] = pai1_sem_inicial[ponto1:ponto2+1]
+    filho2[ponto1:ponto2+1] = pai2_sem_inicial[ponto1:ponto2+1]
     
-    # Cria sets para verificação instantânea O(1)
-    # Isso é o segredo da performance em Python
+    # Cria sets para verificação
     set_f1 = set(filho1[ponto1:ponto2+1])
     set_f2 = set(filho2[ponto1:ponto2+1])
     
     def preencher_restante(filho, pai_origem, conjunto_existente):
-        # Começa a preencher logo após o segundo ponto de corte
         pos_atual = (ponto2 + 1) % n
-        # Começa a ler o outro pai também após o segundo ponto de corte
         idx_pai = (ponto2 + 1) % n
-        
         count = 0
-        while count < n: # Percorre o pai circularmente
+        while count < n:
             cidade = pai_origem[idx_pai]
             if cidade not in conjunto_existente:
                 filho[pos_atual] = cidade
                 pos_atual = (pos_atual + 1) % n
             idx_pai = (idx_pai + 1) % n
             count += 1
-            
-    preencher_restante(filho1, pai2, set_f1)
-    preencher_restante(filho2, pai1, set_f2)
+    
+    preencher_restante(filho1, pai2_sem_inicial, set_f1)
+    preencher_restante(filho2, pai1_sem_inicial, set_f2)
+    
+    # Adiciona cidade inicial no início
+    filho1 = [cidade_inicial_fixa] + filho1
+    filho2 = [cidade_inicial_fixa] + filho2
     
     return filho1, filho2
 
-def cruzamento_pmx(pai1, pai2):
+def cruzamento_pmx(pai1, pai2, cidade_inicial_fixa=0):
     """
-    Realiza cruzamento Partially Mapped Crossover (PMX) entre dois pais.
-    
-    PMX preserva segmentos dos pais e mapeia conflitos de forma inteligente.
-    
-    Args:
-        pai1 (list): Primeira rota (pai)
-        pai2 (list): Segunda rota (pai)
-    
-    Returns:
-        tuple: (filho1, filho2) - Dois filhos gerados
+    Realiza cruzamento PMX preservando cidade inicial fixa.
     """
-    n = len(pai1)
+    # Remove cidade inicial dos pais
+    pai1_sem_inicial = [c for c in pai1 if c != cidade_inicial_fixa]
+    pai2_sem_inicial = [c for c in pai2 if c != cidade_inicial_fixa]
+    
+    n = len(pai1_sem_inicial)
     
     # Seleciona dois pontos de corte aleatórios
     ponto1 = random.randint(0, n - 1)
@@ -276,21 +287,24 @@ def cruzamento_pmx(pai1, pai2):
         
         return filho
     
-    filho1 = criar_filho_pmx(pai1, pai2)
-    filho2 = criar_filho_pmx(pai2, pai1)
+    filho1 = criar_filho_pmx(pai1_sem_inicial, pai2_sem_inicial)
+    filho2 = criar_filho_pmx(pai2_sem_inicial, pai1_sem_inicial)
+    
+    # Adiciona cidade inicial no início
+    filho1 = [cidade_inicial_fixa] + filho1
+    filho2 = [cidade_inicial_fixa] + filho2
     
     return filho1, filho2
 
 
-def mutacao_swap(rota, probabilidade_mutacao=0.1):
+def mutacao_swap(rota, probabilidade_mutacao=0.1, cidade_inicial_fixa=0):
     """
-    Aplica mutação por troca (swap) em uma rota.
-    
-    Com uma certa probabilidade, troca duas cidades aleatórias de posição.
+    Aplica mutação por troca (swap) em uma rota, preservando cidade inicial.
     
     Args:
         rota (list): Rota a ser mutada
         probabilidade_mutacao (float): Probabilidade de mutação (0.0 a 1.0)
+        cidade_inicial_fixa (int): Cidade que não pode ser movida (padrão: 0)
     
     Returns:
         list: Rota mutada (ou original se não houve mutação)
@@ -301,12 +315,16 @@ def mutacao_swap(rota, probabilidade_mutacao=0.1):
     rota_mutada = rota.copy()
     n = len(rota_mutada)
     
-    # Seleciona duas posições aleatórias diferentes
-    pos1 = random.randint(0, n - 1)
-    pos2 = random.randint(0, n - 1)
+    # Não mexe na primeira posição
+    if n < 3:
+        return rota
+    
+    # Seleciona duas posições diferentes (ambas diferentes de 0)
+    pos1 = random.randint(1, n - 1)  # Não pode ser 0
+    pos2 = random.randint(1, n - 1)  # Não pode ser 0
     
     while pos1 == pos2:
-        pos2 = random.randint(0, n - 1)
+        pos2 = random.randint(1, n - 1)
     
     # Troca as cidades
     rota_mutada[pos1], rota_mutada[pos2] = rota_mutada[pos2], rota_mutada[pos1]
@@ -314,15 +332,14 @@ def mutacao_swap(rota, probabilidade_mutacao=0.1):
     return rota_mutada
 
 
-def mutacao_inversao(rota, probabilidade_mutacao=0.1):
+def mutacao_inversao(rota, probabilidade_mutacao=0.1, cidade_inicial_fixa=0):
     """
-    Aplica mutação por inversão em uma rota.
-    
-    Com uma certa probabilidade, inverte um segmento aleatório da rota.
+    Aplica mutação por inversão em uma rota, preservando cidade inicial.
     
     Args:
         rota (list): Rota a ser mutada
         probabilidade_mutacao (float): Probabilidade de mutação (0.0 a 1.0)
+        cidade_inicial_fixa (int): Cidade que não pode ser movida (padrão: 0)
     
     Returns:
         list: Rota mutada (ou original se não houve mutação)
@@ -333,9 +350,13 @@ def mutacao_inversao(rota, probabilidade_mutacao=0.1):
     rota_mutada = rota.copy()
     n = len(rota_mutada)
     
-    # Seleciona dois pontos aleatórios
-    ponto1 = random.randint(0, n - 1)
-    ponto2 = random.randint(0, n - 1)
+    # Não mexe na primeira posição
+    if n < 3:
+        return rota
+    
+    # Seleciona dois pontos aleatórios (ambos diferentes de 0)
+    ponto1 = random.randint(1, n - 1)  # Não pode ser 0
+    ponto2 = random.randint(1, n - 1)  # Não pode ser 0
     
     if ponto1 > ponto2:
         ponto1, ponto2 = ponto2, ponto1
@@ -355,7 +376,8 @@ def algoritmo_genetico(matriz_distancias,
                        metodo_cruzamento='ox',
                        metodo_mutacao='inversao',
                        tamanho_torneio=5,
-                       taxa_elitismo=0.1):
+                       taxa_elitismo=0.1,
+                       cidade_inicial_fixa=0):
     """
     Executa o Algoritmo Genético completo para resolver o PCV.
     
@@ -379,7 +401,7 @@ def algoritmo_genetico(matriz_distancias,
         metodo_cruzamento (str): 'ox' ou 'pmx' (padrão: 'ox')
         metodo_mutacao (str): 'swap' ou 'inversao' (padrão: 'swap')
         taxa_elitismo (float): Percentual de melhores indivíduos mantidos (0.0 a 1.0)
-    
+        cidade_inicial_fixa (int): Cidade que não pode ser movida (padrão: 0)
     Returns:
         tuple: (melhor_rota, melhor_custo, historico_fitness)
             - melhor_rota: Lista com a melhor rota encontrada (com retorno ao início)
@@ -391,7 +413,8 @@ def algoritmo_genetico(matriz_distancias,
     # 1. Inicialização da população
     populacao = inicializar_populacao(tamanho_populacao, num_cidades, 
                                       usar_heuristica=True, 
-                                      matriz_distancias=matriz_distancias)
+                                      matriz_distancias=matriz_distancias,
+                                      cidade_inicial_fixa=cidade_inicial_fixa)
     
     # Variáveis para rastreamento
     melhor_custo_global = float('inf')
@@ -448,24 +471,24 @@ def algoritmo_genetico(matriz_distancias,
             
             # Mutação
             if metodo_mutacao == 'swap':
-                filho1 = mutacao_swap(filho1, probabilidade_mutacao)
-                filho2 = mutacao_swap(filho2, probabilidade_mutacao)
+                filho1 = mutacao_swap(filho1, probabilidade_mutacao, cidade_inicial_fixa)
+                filho2 = mutacao_swap(filho2, probabilidade_mutacao, cidade_inicial_fixa)
             else:  # inversao
-                filho1 = mutacao_inversao(filho1, probabilidade_mutacao)
-                filho2 = mutacao_inversao(filho2, probabilidade_mutacao)
+                filho1 = mutacao_inversao(filho1, probabilidade_mutacao, cidade_inicial_fixa)
+                filho2 = mutacao_inversao(filho2, probabilidade_mutacao, cidade_inicial_fixa)
             
             # Adiciona os filhos à nova população
             if filho1 != pai1 and filho1 != pai2:
                 nova_populacao.append(filho1)
             else:
                 # Se for clone, aplica uma mutação forçada para diferenciar
-                nova_populacao.append(mutacao_inversao(filho1, probabilidade_mutacao=1.0))
+                nova_populacao.append(mutacao_inversao(filho1, probabilidade_mutacao=1.0, cidade_inicial_fixa=cidade_inicial_fixa))
 
             if len(nova_populacao) < tamanho_populacao:
                 if filho2 != pai1 and filho2 != pai2:
                     nova_populacao.append(filho2)
                 else:
-                    nova_populacao.append(mutacao_inversao(filho2, probabilidade_mutacao=1.0))
+                    nova_populacao.append(mutacao_inversao(filho2, probabilidade_mutacao=1.0, cidade_inicial_fixa=cidade_inicial_fixa))
         
         # Atualiza população para próxima geração
         populacao = nova_populacao

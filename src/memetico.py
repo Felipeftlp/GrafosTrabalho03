@@ -21,16 +21,17 @@ from src.utils import calcular_custo_rota
 from src.genetico import mutacao_inversao, mutacao_swap, cruzamento_ox, cruzamento_pmx
 from src.genetico import selecao_roleta, selecao_torneio, avaliar_populacao, inicializar_populacao
 
-def mutacao_shift(rota, probabilidade_mutacao=0.1):
+def mutacao_shift(rota, probabilidade_mutacao=0.1, cidade_inicial_fixa=0):
     """
-    Aplica mutação por deslocamento (shift) em uma rota.
+    Aplica mutação por deslocamento (shift) em uma rota, preservando cidade inicial.
     
     Com uma certa probabilidade, remove uma cidade de uma posição
-    e reinsere em outra posição da rota.
+    e reinsere em outra posição da rota (exceto a primeira).
     
     Args:
         rota (list): Rota a ser mutada
         probabilidade_mutacao (float): Probabilidade de mutação (0.0 a 1.0)
+        cidade_inicial_fixa (int): Cidade que não pode ser movida (padrão: 0)
     
     Returns:
         list: Rota mutada (ou original se não houve mutação)
@@ -40,40 +41,52 @@ def mutacao_shift(rota, probabilidade_mutacao=0.1):
     
     rota_mutada = rota.copy()
     n = len(rota_mutada)
-
-    # Seleciona a posição de origem e destino (devem ser diferentes)
-    origem = random.randint(0, n - 1)
-    destino = random.randint(0, n - 1)
-
+    
+    # Não mexe na primeira posição (cidade inicial)
+    if n < 3:  # Precisa de pelo menos cidade inicial + 2 outras
+        return rota
+    
+    # Seleciona a posição de origem e destino (ambas diferentes de 0)
+    origem = random.randint(1, n - 1)  # Não pode ser 0
+    destino = random.randint(1, n - 1)  # Não pode ser 0
+    
     while origem == destino:
-        destino = random.randint(0, n - 1)
-
+        destino = random.randint(1, n - 1)
+    
     # Remove a cidade da posição de origem
-    cidade = rota_mutada.pop(origem)  # cidade removida
-
-    # Insere a cidade na nova posição
-    # Obs.: após o pop, o tamanho reduz, então destino pode mudar
+    cidade = rota_mutada.pop(origem)
+    
+    # Ajusta destino se necessário
     if destino > origem:
-        destino -= 1  # ajusta índice se necessário
-
+        destino -= 1
+    
+    # Insere a cidade na nova posição (garantindo que não seja na posição 0)
+    if destino == 0:
+        destino = 1
+    
     rota_mutada.insert(destino, cidade)
-
+    
     return rota_mutada
 
-def mutacao_2_opt(rota, probabilidade_mutacao=0.1):
+def mutacao_2_opt(rota, probabilidade_mutacao=0.1, cidade_inicial_fixa=0):
     """
-    Aplica mutação 2-OPT em uma rota.
+    Aplica mutação 2-OPT em uma rota, preservando cidade inicial.
 
     Remove duas arestas e reconecta invertendo o segmento entre duas posições.
+    Não mexe na primeira posição (cidade inicial).
     """
     if random.random() > probabilidade_mutacao:
         return rota
 
     n = len(rota)
     rota_mutada = rota.copy()
+    
+    # Não mexe na primeira posição (cidade inicial)
+    if n < 3:
+        return rota
 
-    # Seleciona duas posições distintas
-    i = random.randint(0, n - 2)
+    # Seleciona duas posições distintas (ambas diferentes de 0)
+    i = random.randint(1, n - 2)  # Não pode ser 0
     j = random.randint(i + 1, n - 1)
 
     # Inverte o segmento entre i e j
@@ -81,14 +94,14 @@ def mutacao_2_opt(rota, probabilidade_mutacao=0.1):
 
     return rota_mutada
 
-def busca_local_2_opt(rota, matriz_distancias):
+def busca_local_2_opt(rota, matriz_distancias, cidade_inicial_fixa=0):
     # Cálculo do custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
     # Executa tentativas de melhoria
     for _ in range(len(rota)):
-        nova = mutacao_2_opt(melhor_rota, probabilidade_mutacao=1.0)
+        nova = mutacao_2_opt(melhor_rota, probabilidade_mutacao=1.0, cidade_inicial_fixa=cidade_inicial_fixa)
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
         if novo_custo < melhor_custo:
@@ -97,14 +110,14 @@ def busca_local_2_opt(rota, matriz_distancias):
 
     return melhor_rota
 
-def busca_local_shift(rota, matriz_distancias):
+def busca_local_shift(rota, matriz_distancias, cidade_inicial_fixa=0):
     # Custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
     # Tenta até achar uma melhoria
     for _ in range(len(rota)):
-        nova = mutacao_shift(melhor_rota, probabilidade_mutacao=1.0)
+        nova = mutacao_shift(melhor_rota, probabilidade_mutacao=1.0, cidade_inicial_fixa=cidade_inicial_fixa)
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
         if novo_custo < melhor_custo:
@@ -114,14 +127,23 @@ def busca_local_shift(rota, matriz_distancias):
     return melhor_rota
 
 
-def busca_local_swap(rota, matriz_distancias):
+def busca_local_swap(rota, matriz_distancias, cidade_inicial_fixa=0):
     # Custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
-    # Tenta até achar uma melhoria
+    # Tenta até achar uma melhoria (não mexe na posição 0)
+    n = len(rota)
+    if n < 3:
+        return rota
+    
     for _ in range(len(rota)):
         nova = mutacao_swap(melhor_rota, probabilidade_mutacao=1.0)
+        # Garante que cidade inicial não foi movida
+        if nova[0] != cidade_inicial_fixa:
+            # Se foi movida, troca de volta
+            idx = nova.index(cidade_inicial_fixa)
+            nova[0], nova[idx] = nova[idx], nova[0]
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
         if novo_custo < melhor_custo:
@@ -131,14 +153,23 @@ def busca_local_swap(rota, matriz_distancias):
     return melhor_rota
 
 
-def busca_local_inversao(rota, matriz_distancias):
+def busca_local_inversao(rota, matriz_distancias, cidade_inicial_fixa=0):
     # Custo atual
     melhor_rota = rota
     melhor_custo = calcular_custo_rota(rota + [rota[0]], matriz_distancias)
 
-    # Tenta até achar uma melhoria
+    # Tenta até achar uma melhoria (não mexe na posição 0)
+    n = len(rota)
+    if n < 3:
+        return rota
+    
     for _ in range(len(rota)):
         nova = mutacao_inversao(melhor_rota, probabilidade_mutacao=1.0)
+        # Garante que cidade inicial não foi movida
+        if nova[0] != cidade_inicial_fixa:
+            # Se foi movida, troca de volta
+            idx = nova.index(cidade_inicial_fixa)
+            nova[0], nova[idx] = nova[idx], nova[0]
         novo_custo = calcular_custo_rota(nova + [nova[0]], matriz_distancias)
 
         if novo_custo < melhor_custo:
@@ -157,7 +188,8 @@ def algoritmo_memetico(matriz_distancias,
                        metodo_cruzamento='ox',
                        metodo_mutacao='inversao',
                        tamanho_torneio=5,
-                       taxa_elitismo=0.1):
+                       taxa_elitismo=0.1,
+                       cidade_inicial_fixa=0):
     """
     Executa o Algoritmo Memético completo para resolver o PCV.
     
@@ -194,7 +226,8 @@ def algoritmo_memetico(matriz_distancias,
     # 1. Inicialização da população
     populacao = inicializar_populacao(tamanho_populacao, num_cidades, 
                                       usar_heuristica=True, 
-                                      matriz_distancias=matriz_distancias)
+                                      matriz_distancias=matriz_distancias,
+                                      cidade_inicial_fixa=cidade_inicial_fixa)
     
     # Variáveis para rastreamento
     melhor_custo_global = float('inf')
@@ -242,9 +275,9 @@ def algoritmo_memetico(matriz_distancias,
             # Cruzamento
             if random.random() < probabilidade_cruzamento:
                 if metodo_cruzamento == 'ox':
-                    filho1, filho2 = cruzamento_ox(pai1, pai2)
+                    filho1, filho2 = cruzamento_ox(pai1, pai2, cidade_inicial_fixa)
                 else:  # pmx
-                    filho1, filho2 = cruzamento_pmx(pai1, pai2)
+                    filho1, filho2 = cruzamento_pmx(pai1, pai2, cidade_inicial_fixa)
             else:
                 # Sem cruzamento, os filhos são cópias dos pais
                 filho1, filho2 = pai1.copy(), pai2.copy()
@@ -253,27 +286,41 @@ def algoritmo_memetico(matriz_distancias,
             if metodo_mutacao == 'swap':
                 filho1 = mutacao_swap(filho1, probabilidade_mutacao)
                 filho2 = mutacao_swap(filho2, probabilidade_mutacao)
+                # Garante que cidade inicial não foi movida
+                if filho1[0] != cidade_inicial_fixa:
+                    idx = filho1.index(cidade_inicial_fixa)
+                    filho1[0], filho1[idx] = filho1[idx], filho1[0]
+                if filho2[0] != cidade_inicial_fixa:
+                    idx = filho2.index(cidade_inicial_fixa)
+                    filho2[0], filho2[idx] = filho2[idx], filho2[0]
             elif metodo_mutacao == 'shift':
-                filho1 = mutacao_shift(filho1, probabilidade_mutacao)
-                filho2 = mutacao_shift(filho2, probabilidade_mutacao)
+                filho1 = mutacao_shift(filho1, probabilidade_mutacao, cidade_inicial_fixa)
+                filho2 = mutacao_shift(filho2, probabilidade_mutacao, cidade_inicial_fixa)
             else:
                 filho1 = mutacao_inversao(filho1, probabilidade_mutacao)
                 filho2 = mutacao_inversao(filho2, probabilidade_mutacao)
+                # Garante que cidade inicial não foi movida
+                if filho1[0] != cidade_inicial_fixa:
+                    idx = filho1.index(cidade_inicial_fixa)
+                    filho1[0], filho1[idx] = filho1[idx], filho1[0]
+                if filho2[0] != cidade_inicial_fixa:
+                    idx = filho2.index(cidade_inicial_fixa)
+                    filho2[0], filho2[idx] = filho2[idx], filho2[0]
 
-            # Busca local de melhoria (Escolhe aleatoriamente uma das quatro estratégias)
+            # Busca local de melhoria
             escolha = random.choice(['shift', 'swap', 'inversao', '2opt'])
             if escolha == 'shift':
-                filho1 = busca_local_shift(filho1, matriz_distancias)
-                filho2 = busca_local_shift(filho2, matriz_distancias)
+                filho1 = busca_local_shift(filho1, matriz_distancias, cidade_inicial_fixa)
+                filho2 = busca_local_shift(filho2, matriz_distancias, cidade_inicial_fixa)
             elif escolha == 'swap':
-                filho1 = busca_local_swap(filho1, matriz_distancias)
-                filho2 = busca_local_swap(filho2, matriz_distancias)
+                filho1 = busca_local_swap(filho1, matriz_distancias, cidade_inicial_fixa)
+                filho2 = busca_local_swap(filho2, matriz_distancias, cidade_inicial_fixa)
             elif escolha == 'inversao':
-                filho1 = busca_local_inversao(filho1, matriz_distancias)
-                filho2 = busca_local_inversao(filho2, matriz_distancias)
+                filho1 = busca_local_inversao(filho1, matriz_distancias, cidade_inicial_fixa)
+                filho2 = busca_local_inversao(filho2, matriz_distancias, cidade_inicial_fixa)
             else:  # '2opt'
-                filho1 = busca_local_2_opt(filho1, matriz_distancias)
-                filho2 = busca_local_2_opt(filho2, matriz_distancias)
+                filho1 = busca_local_2_opt(filho1, matriz_distancias, cidade_inicial_fixa)
+                filho2 = busca_local_2_opt(filho2, matriz_distancias, cidade_inicial_fixa)
 
             
             # Adiciona os filhos à nova população
@@ -281,7 +328,12 @@ def algoritmo_memetico(matriz_distancias,
                 nova_populacao.append(filho1)
             else:
                 # Se for clone, aplica uma mutação forçada para diferenciar
-                nova_populacao.append(mutacao_inversao(filho1, probabilidade_mutacao=1.0))
+                mutacao_forcada = mutacao_inversao(filho1, probabilidade_mutacao=1.0)
+                # Garante que cidade inicial não foi movida
+                if mutacao_forcada[0] != cidade_inicial_fixa:
+                    idx = mutacao_forcada.index(cidade_inicial_fixa)
+                    mutacao_forcada[0], mutacao_forcada[idx] = mutacao_forcada[idx], mutacao_forcada[0]
+                nova_populacao.append(mutacao_forcada)
 
             if len(nova_populacao) < tamanho_populacao:
                 if filho2 != pai1 and filho2 != pai2:

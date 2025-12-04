@@ -2,7 +2,7 @@ import random
 import copy
 from src.utils import calcular_custo_rota
 
-def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False):
+def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False, cidade_inicial=0):
     """
     Implementa a Heurística Construtiva do Vizinho Mais Próximo (Nearest Neighbor).
     
@@ -14,7 +14,8 @@ def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False):
     
     Args:
         matriz_distancias (list): Matriz NxN.
-        inicio_aleatorio (bool): Se True, começa de uma cidade random. Se False, começa da 0.
+        inicio_aleatorio (bool): Se True, começa de uma cidade random. Se False, usa cidade_inicial.
+        cidade_inicial (int): Cidade inicial quando inicio_aleatorio=False (padrão: 0)
         
     Returns:
         list: A rota construída (ex: [0, 4, 1, 2, 3, 0])
@@ -23,7 +24,7 @@ def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False):
     visitadas = set()
     
     # Passo 1: Escolher cidade inicial
-    cidade_atual = random.randint(0, num_cidades - 1) if inicio_aleatorio else 0
+    cidade_atual = random.randint(0, num_cidades - 1) if inicio_aleatorio else cidade_inicial
     rota = [cidade_atual]
     visitadas.add(cidade_atual)
     
