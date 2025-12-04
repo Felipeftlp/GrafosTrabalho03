@@ -108,7 +108,7 @@ def executar_problema(args, num_problema):
     matriz_problema = extrair_submatriz_por_ids(matriz_completa, ids_cidades)
 
     # 4. Execução (20x para estatística)
-    n_execucoes = 20 if args.alg in [3, 4] else 1
+    n_execucoes = 20 if args.alg in [1, 3, 4] else 1
     
     print(f"[*] Rodando {n_execucoes} execuções do Algoritmo {args.alg}...")
     
