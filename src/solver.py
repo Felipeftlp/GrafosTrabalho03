@@ -14,7 +14,8 @@ def vizinho_mais_proximo(matriz_distancias, cidade_inicial):
     
     Args:
         matriz_distancias (list): Matriz NxN.
-        inicio_aleatorio (bool): Se True, começa de uma cidade random. Se False, começa da 0.
+        inicio_aleatorio (bool): Se True, começa de uma cidade random. Se False, usa cidade_inicial.
+        cidade_inicial (int): Cidade inicial quando inicio_aleatorio=False (padrão: 0)
         
     Returns:
         list: A rota construída (ex: [0, 4, 1, 2, 3, 0])
