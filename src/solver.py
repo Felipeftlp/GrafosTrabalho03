@@ -54,6 +54,90 @@ def vizinho_mais_proximo(matriz_distancias, inicio_aleatorio=False):
     
     return rota
 
+def insercao_mais_barata(matriz_distancias, vertice_inicial):
+    """
+    Implementa a Heurística Construtiva de Inserção Mais Barata.
+    
+    Lógica:
+    1. Começa com um pequeno ciclo: O vértice inicial e seu vizinho mais próximo.
+    2. Iterativamente insere o vértice que causa o menor aumento de custo na rota.
+    3. Repete até incluir todos os vértices.
+    
+    Args:
+        matriz_distancias (list): Matriz NxN.
+        vertice_inicial (int): Vértice de início da rota.
+        
+    Returns:
+        list: A rota construída (ex: [0, 2, 1, 3, 0])
+    """
+    num_cidades = len(matriz_distancias)
+    print(f"Numero de cidades: {num_cidades}")
+    
+    # Passo inicial: encontrar o vértice mais próximo de s (escolha gulosa)
+    v0 = -1
+    menor_distancia = float('inf')
+    for v in range(num_cidades):
+        if v != vertice_inicial:
+            distancia = matriz_distancias[vertice_inicial][v]
+            if distancia < menor_distancia:
+                menor_distancia = distancia
+                v0 = v
+    
+    # Inicializar rota com ciclo inicial [s, v0, s]
+    rota = [vertice_inicial, v0, vertice_inicial]
+    
+    # C: vértices já inseridos
+    C = {vertice_inicial, v0}
+    
+    # R: vértices restantes
+    R = set(range(num_cidades)) - C
+    
+    # Loop principal: enquanto há vértices para inserir
+    while R:
+        # Passo 1: escolher o vértice mais próximo do ciclo atual
+        melhor_r = None
+        menor_dist_ao_ciclo = float('inf')
+        
+        for r in R:
+            # Calcular distância mínima de r para qualquer vértice em C
+            dist_r = float('inf')
+            for c in C:
+                dist_r = min(dist_r, matriz_distancias[r][c])
+            
+            # Escolher r* = argmin_r(dist_r)
+            if dist_r < menor_dist_ao_ciclo:
+                menor_dist_ao_ciclo = dist_r
+                melhor_r = r
+        
+        r_estrela = melhor_r
+        
+        # Passo 2: encontrar melhor posição para inserção de r*
+        melhor_custo = float('inf')
+        melhor_pos = None
+        
+        # Para i de 1 até |rota|-1 (excluindo a última posição que é igual à primeira)
+        for i in range(1, len(rota) - 1):
+            u = rota[i - 1]  # vértice anterior
+            v = rota[i]      # vértice atual
+            
+            # Calcular custo de inserção: d(u, r*) + d(r*, v) - d(u, v)
+            custo = (matriz_distancias[u][r_estrela] + 
+                    matriz_distancias[r_estrela][v] - 
+                    matriz_distancias[u][v])
+            
+            if custo < melhor_custo:
+                melhor_custo = custo
+                melhor_pos = i
+        
+        # Inserir r* na melhor posição encontrada
+        rota.insert(melhor_pos, r_estrela)
+        
+        # Atualizar conjuntos
+        C.add(r_estrela)
+        R.remove(r_estrela)
+    
+    return rota
+
 def busca_local_2opt(rota, matriz_distancias):
     """
     Aplica a busca local 2-Opt (Best Improvement ou First Improvement).

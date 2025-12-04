@@ -3,7 +3,7 @@ import time
 import argparse
 import statistics
 from src.utils import ler_matriz_csv, ler_nomes_cidades, calcular_custo_rota, extrair_submatriz_por_ids
-from src.solver import vizinho_mais_proximo, busca_local_2opt
+from src.solver import vizinho_mais_proximo, insercao_mais_barata, busca_local_2opt
 from src.genetico import algoritmo_genetico
 from src.memetico import algoritmo_memetico
 
@@ -46,9 +46,10 @@ def executar_uma_vez(algoritmo, matriz_problema):
         rota = busca_local_2opt(rota_ini, matriz_problema)
         custo = calcular_custo_rota(rota, matriz_problema)
         
-    elif algoritmo == 2: # Inserção Mais Barata
-        # TODO: Chamar função do Integrante 2
-        pass 
+    elif algoritmo == 2: # Inserção Mais Barata + 2-Opt
+        rota_ini = insercao_mais_barata(matriz_problema, vertice_inicial=0)
+        rota = busca_local_2opt(rota_ini, matriz_problema)
+        custo = calcular_custo_rota(rota, matriz_problema)
         
     elif algoritmo == 3: # Genético
         # Executa o algoritmo genético
@@ -107,7 +108,7 @@ def executar_problema(args, num_problema):
     matriz_problema = extrair_submatriz_por_ids(matriz_completa, ids_cidades)
 
     # 4. Execução (20x para estatística)
-    n_execucoes = 20 
+    n_execucoes = 20 if args.alg in [3, 4] else 1
     
     print(f"[*] Rodando {n_execucoes} execuções do Algoritmo {args.alg}...")
     
